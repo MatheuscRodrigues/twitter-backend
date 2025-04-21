@@ -46,3 +46,16 @@ class Tweet(models.Model):
 
     class Meta:
         ordering = ['-created_at']  # Para mostrar os tweets mais recentes primeiro
+
+# Relacionamento de seguidores
+class Follow(models.Model):
+    follower = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)  # Quem está seguindo
+    following = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)  # Quem está sendo seguido
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('follower', 'following')  # Impede seguir duas vezes a mesma pessoa
+
+    def __str__(self):
+        return f"{self.follower.username} segue {self.following.username}"

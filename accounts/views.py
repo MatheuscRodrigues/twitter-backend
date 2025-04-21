@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
 
 from .models import Follow, Tweet
 from .serializers import UserSerializer, TweetSerializer, FollowSerializer
@@ -60,3 +61,15 @@ class UnfollowUserView(APIView):
             return Response({'detail': 'Unfollow realizado com sucesso.'}, status=status.HTTP_204_NO_CONTENT)
         except Follow.DoesNotExist:
             return Response({'error': 'Você não está seguindo este usuário.'}, status=400)
+        
+# View feed personalizado
+class TweetFeedView(ListAPIView):
+    serializer_class = TweetSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Lista os usuários que o usuário autenticado segue
+        followed_users = Follow.objects.filter(follower=self.request.user).values_list('following_id', flat=True)
+
+        # Inclui também os próprios tweets
+        return Tweet.objects.filter(user__in=list(followed_users) + [self.request.user.id]).order_by('-created_at')

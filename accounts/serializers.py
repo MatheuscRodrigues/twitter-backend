@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Tweet
 
+# Serializer do modelo User
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -15,3 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+
+# Serializer do modelo Tweet
+class TweetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tweet
+        fields = ['id', 'user', 'content', 'created_at']
+        read_only_fields = ['user', 'created_at']

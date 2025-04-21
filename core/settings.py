@@ -127,6 +127,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Informa ao Django para usar o modelo User criado no app accounts
 AUTH_USER_MODEL = 'accounts.User'
 
 SIMPLE_JWT = {

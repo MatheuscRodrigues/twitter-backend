@@ -36,13 +36,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 # Modelo de tweet
 class Tweet(models.Model):
-    # Vinculação entre tweet e usuário que o criou
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="tweets")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)  # Tweet pai (comentário)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.content[:50]  # Mostrar só os primeiros 50 caracteres do tweet
+        return f"{self.user.username}: {self.content[:50]}"
 
     class Meta:
         ordering = ['-created_at']  # Para mostrar os tweets mais recentes primeiro

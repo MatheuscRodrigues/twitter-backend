@@ -1,85 +1,142 @@
-Twitter Clone - Backend
-This is the backend of the Twitter Clone project, developed with Django and Django REST Framework.
-It provides RESTful APIs for user registration, authentication, tweeting, following users, liking, retweeting, and commenting.
+# Twitter Clone Backend
 
-Technologies Used
-Python 3.12
+## Overview
 
-Django 5.2
+This project is a backend clone of Twitter (X) that implements essential functionalities such as user authentication, tweet management, following users, liking, retweeting, and commenting.  
+The backend is built using Django and Django REST Framework (DRF), with PostgreSQL as the database for production environments.
 
-Django REST Framework
+---
 
-PostgreSQL (database)
+## Features
 
-Project Structure
-accounts: User registration, login, tweets, user feed, follow/unfollow.
+- User authentication with JWT
+- User registration and login
+- Create, delete, and interact with tweets
+- Follow and unfollow users
+- Like and unlike tweets
+- Retweet tweets
+- Comment on tweets
 
-interactions: Like/unlike tweets, retweet, comment.
+---
 
-Setup Instructions
-Clone the repository:
+## Tech Stack
 
-bash
-Copy
-Edit
-git clone https://github.com/your-username/twitter-backend.git
-cd twitter-backend
-Create and activate a virtual environment:
+- **Backend**: Django, Django REST Framework
+- **Authentication**: SimpleJWT
+- **Database**: PostgreSQL (local and production)
+- **API Documentation**: Not yet implemented (Swagger integration recommended)
 
-bash
-Copy
-Edit
-python -m venv venv
-source venv/bin/activate    # Linux/Mac
-venv\Scripts\activate       # Windows
-Install dependencies:
+---
 
-bash
-Copy
-Edit
-pip install -r requirements.txt
-Apply database migrations:
+## Architecture
 
-bash
-Copy
-Edit
-python manage.py migrate
-Create a superuser (optional for admin access):
+The backend is structured into modular Django apps:
 
-bash
-Copy
-Edit
-python manage.py createsuperuser
-Run the development server:
+- **accounts**: Handles user management, authentication, and tweets.
+- **interactions**: Manages tweet interactions like likes, retweets, and comments.
 
-bash
-Copy
-Edit
-python manage.py runserver
-Available Endpoints
+The backend exposes a RESTful API consumed by the frontend (React).
 
-Endpoint	Method	Description	Authentication
-/api/accounts/register/	POST	Register a new user	No
-/api/accounts/login/	POST	Obtain JWT access and refresh token	No
-/api/accounts/tweet/	POST	Create a new tweet	Yes
-/api/accounts/follow/	POST	Follow another user	Yes
-/api/accounts/unfollow/	POST	Unfollow a user	Yes
-/api/accounts/feed/	GET	Get user feed	Yes
-/api/interactions/like/<tweet_id>/	POST	Like or unlike a tweet	Yes
-/api/interactions/retweet/<tweet_id>/	POST	Retweet a tweet	Yes
-/api/interactions/comment/<tweet_id>/	POST	Comment on a tweet	Yes
-Notes
-JWT Authentication is required for protected endpoints.
+---
 
-Each tweet is linked to the user who created it.
+## API Endpoints Overview
 
-User actions such as liking, retweeting, and commenting are handled via the interactions app.
+### Authentication
 
-References
-Django Official Documentation
+- `POST /api/accounts/register/` - Register a new user
+- `POST /api/accounts/login/` - Obtain JWT access and refresh tokens
+- `POST /api/accounts/login/refresh/` - Refresh expired access token
 
-Django REST Framework Documentation
+### User Actions
 
-Simple JWT Documentation
+- `POST /api/accounts/follow/` - Follow a user
+- `POST /api/accounts/unfollow/` - Unfollow a user
+- `GET /api/accounts/feed/` - Get tweets from followed users
 
+### Tweets
 
+- `POST /api/accounts/tweet/` - Create a new tweet
+
+### Interactions
+
+- `POST /api/interactions/like/<tweet_id>/` - Like or unlike a tweet
+- `POST /api/interactions/retweet/<tweet_id>/` - Retweet a tweet
+- `POST /api/interactions/comment/<tweet_id>/` - Comment on a tweet
+
+---
+
+## Setup Instructions
+
+### Local Setup
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/twitter-backend.git
+   cd twitter-backend
+   ```
+
+2. Create and activate a virtual environment:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate   # Linux/Mac
+   venv\Scripts\activate    # Windows
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Configure PostgreSQL settings in `settings.py` or using a `.env` file.
+
+5. Apply migrations:
+
+   ```bash
+   python manage.py migrate
+   ```
+
+6. Create a superuser (optional):
+
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+7. Run the development server:
+   ```bash
+   python manage.py runserver
+   ```
+
+---
+
+## Testing Strategy
+
+- Manual testing of all endpoints via Postman during development.
+- Automated testing planned for future versions (pytest, Django TestCase).
+
+---
+
+## Project Status
+
+This backend is functional and serves as the foundation for the frontend React application.
+
+- JWT Authentication fully implemented
+- Core tweet and interaction functionalities completed
+- Ready for deployment with production database configuration
+
+---
+
+## References
+
+- [Django Documentation](https://docs.djangoproject.com/en/5.2/)
+- [Django REST Framework Documentation](https://www.django-rest-framework.org/)
+- [Simple JWT Documentation](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/)
+
+---
+
+# Observations
+
+- The backend is designed to be secure, modular, and easy to extend.
+- Best practices in code organization and RESTful API development were followed.

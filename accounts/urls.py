@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import FeedView, FollowUserView, RegisterView, CreateTweetView, TweetFeedView, UnfollowUserView
+from .views import FeedView, FollowUserView, PasswordResetView, RegisterView, CreateTweetView, TweetFeedView, UnfollowUserView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('feed/', FeedView.as_view(), name='feed'),
     path('unfollow/', UnfollowUserView.as_view(), name='unfollow-user'),
     path('feed/', TweetFeedView.as_view(), name='tweet-feed'),
+    path('password-reset/', PasswordResetView.as_view(), name='password-reset'),
 ]

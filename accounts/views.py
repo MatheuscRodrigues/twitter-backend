@@ -4,9 +4,12 @@ from rest_framework import status
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
+from django.contrib.auth import get_user_model
 
 from .models import Follow, Tweet
 from .serializers import UserSerializer, TweetSerializer, FollowSerializer
+
+User = get_user_model()
 
 # View de registro de novo usuario
 class RegisterView(APIView):
@@ -73,3 +76,20 @@ class TweetFeedView(ListAPIView):
 
         # Inclui também os próprios tweets
         return Tweet.objects.filter(user__in=list(followed_users) + [self.request.user.id]).order_by('-created_at')
+    
+# View de recuperação de senha
+class PasswordResetView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        new_password = request.data.get('new_password')
+
+        if not email or not new_password:
+            return Response({'error': 'Email and new password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email)
+            user.set_password(new_password)
+            user.save()
+            return Response({'detail': 'Password reset successfully.'}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'error': 'User with this email does not exist.'}, status=status.HTTP_404_NOT_FOUND)
